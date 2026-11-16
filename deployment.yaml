@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clubsphere-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clubsphere
+  template:
+    metadata:
+      labels:
+        app: clubsphere
+    spec:
+      containers:
+        - name: clubsphere
+          image: mallikarjunbaddi/clubsphere:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000

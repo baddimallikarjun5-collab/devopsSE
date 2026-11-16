@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClubSphere | Discover Your Community</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <a class="brand" href="/">Club<span>Sphere</span></a>
+        <nav>
+            <a href="#clubs">Clubs</a>
+            <a href="#events">Events</a>
+            <a href="#join">Join a Club</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <p class="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</p>
+                <h1>Find your people.<br><span>Follow your passion.</span></h1>
+                <p class="hero-text">
+                    Discover student communities, learn new skills and make
+                    your college experience unforgettable.
+                </p>
+                <a class="button" href="#clubs">Explore clubs <span>→</span></a>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="hero-icon">✦</div>
+                <div class="floating-card card-one">💻 <span>Technology</span></div>
+                <div class="floating-card card-two">🎨 <span>Creativity</span></div>
+                <div class="floating-card card-three">🤝 <span>Community</span></div>
+            </div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="messages">
+                    {% for category, message in messages %}
+                        <div class="message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <section class="section" id="clubs">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">FIND YOUR INTEREST</p>
+                    <h2>Explore our clubs</h2>
+                </div>
+                <p class="section-note">There is a place for everyone.</p>
+            </div>
+
+            <div class="club-grid">
+                {% for club in clubs %}
+                    <article class="club-card">
+                        <div class="club-icon">{{ club.icon }}</div>
+                        <p class="category">{{ club.category }}</p>
+                        <h3>{{ club.name }}</h3>
+                        <p class="description">{{ club.description }}</p>
+                        <a href="#join" class="text-link">Join this club <span>→</span></a>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="events-section" id="events">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">WHAT'S HAPPENING</p>
+                    <h2>Upcoming events</h2>
+                </div>
+            </div>
+            <div class="event-list">
+                {% for event in events %}
+                    <article class="event-row">
+                        <div class="event-date">📅 {{ event.date }}</div>
+                        <div class="event-info">
+                            <h3>{{ event.title }}</h3>
+                            <p>Organised by {{ event.club }}</p>
+                        </div>
+                        <span class="event-tag">Upcoming</span>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="join-section" id="join">
+            <div class="join-copy">
+                <p class="eyebrow">TAKE THE FIRST STEP</p>
+                <h2>Ready to get involved?</h2>
+                <p>Choose a club and send your membership request.</p>
+                <div class="join-decoration">✦</div>
+            </div>
+            <form class="join-form" method="POST" action="/">
+                <label for="student_name">Your name</label>
+                <input id="student_name" name="student_name" type="text"
+                       placeholder="Enter your full name" required maxlength="80">
+
+                <label for="student_email">College email</label>
+                <input id="student_email" name="student_email" type="email"
+                       placeholder="you@example.com" required maxlength="120">
+
+                <label for="club">Choose a club</label>
+                <select id="club" name="club" required>
+                    <option value="">Select a club</option>
+                    {% for club in clubs %}
+                        <option value="{{ club.name }}">{{ club.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <button class="button submit-button" type="submit">Submit membership request →</button>
+            </form>
+        </section>
+
+        <section class="section members-section">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">COMMUNITY</p>
+                    <h2>Recent membership requests</h2>
+                </div>
+                <span class="member-count">{{ memberships|length }} requests</span>
+            </div>
+            {% if memberships %}
+                <div class="member-list">
+                    {% for member in memberships %}
+                        <div class="member-row">
+                            <div class="avatar">{{ member.name[0]|upper }}</div>
+                            <div>
+                                <strong>{{ member.name }}</strong>
+                                <p>{{ member.club }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-state">No membership requests yet. Be the first to join!</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <a class="brand" href="/">Club<span>Sphere</span></a>
+        <p>Connecting students. Creating communities.</p>
+        <p class="copyright">© 2026 ClubSphere — College DevOps Project</p>
+    </footer>
+    <script>
+        // Smooth scrolling for in-page navigation.
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', event => {
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    event.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
